@@ -1,10 +1,21 @@
 version: "3.4"
 services:
   environment:
+    environment:
+      RABBITMQ_SERVER: rabbitmq
     build: build-environment
-    container_name: api-lumen
+    container_name: dinheiro-ou-cartao
     volumes:
       - ../:/var/www/html/
     ports:
       - "8000:8000"
     command: php -S 0.0.0.0:8000 -t public/
+    depends_on:
+      - rabbitmq
+    links: [rabbitmq]
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
