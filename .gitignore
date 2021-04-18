@@ -1,0 +1,4 @@
+vendor/*
+database/database.sqlite
+database/tests.sqlite
+.env
