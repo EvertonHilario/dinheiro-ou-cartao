@@ -3,6 +3,7 @@ services:
   environment:
     environment:
       RABBITMQ_SERVER: rabbitmq
+      DB_HOST: mysql
     build: build-environment
     container_name: dinheiro-ou-cartao
     volumes:
@@ -12,10 +13,25 @@ services:
     command: php -S 0.0.0.0:8000 -t public/
     depends_on:
       - rabbitmq
-    links: [rabbitmq]
+      - mysql
+    links: 
+      - rabbitmq
+      - mysql
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
         - 5672:5672
         - 15672:15672
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_ROOT_PASSWORD: 'password'
