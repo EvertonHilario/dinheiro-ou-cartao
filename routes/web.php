@@ -14,3 +14,8 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'v1/transactions'], function () use ($router) {
+    $router->post('/transfer', 'TransactionsController@transfer');
+    $router->post('/chargeback', 'TransactionsController@chargeback');
+});
