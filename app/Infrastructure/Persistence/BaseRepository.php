@@ -14,7 +14,7 @@ class BaseRepository implements PersistenceRepositoryInterface
 
     /**      
      * BaseRepository constructor.
-     *      
+     *
      * @param Model $model
      */
     public function __construct(Model $model)
@@ -34,6 +34,7 @@ class BaseRepository implements PersistenceRepositoryInterface
 
     /**
      * @param $id
+     * 
      * @return Model
      */
     public function find(int $id): ?Model
@@ -43,6 +44,7 @@ class BaseRepository implements PersistenceRepositoryInterface
 
     /**
      * @param int $id
+     * 
      * @return Bool
      */
     public function delete(Model $model): Bool
@@ -53,10 +55,22 @@ class BaseRepository implements PersistenceRepositoryInterface
     /**
      * @param Model $model
      * @param array $attributes
+     * 
      * @return Bool
      */
     public function update(Model $model, array $attributes): Bool
     {
         return $model->update($attributes);
+    }
+    
+    /**
+     * @param $attribute
+     * @param $value
+     * 
+     * @return Model
+     */
+    public function findByAttribute($attribute, $value): ?Model
+    {
+        return $this->model->where($attribute , '=', $value)->first();
     }
 }
