@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Domain\Repositories\PersistenceRepositoryInterface;
 use App\Domain\Repositories\UsersRepositoryInterface;
-use App\Infrastructure\Eloquent\UsersRepository;
-use App\Infrastructure\Eloquent\BaseRepository;
+
+use App\Infrastructure\Persistence\BaseRepository;
+use App\Infrastructure\Persistence\UsersRepository;
+
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -21,6 +23,7 @@ class RepositoryServiceProvider extends ServiceProvider
     */
    public function register()
    {
-       $this->app->bind(PersistenceRepositoryInterface::class, BaseRepository::class);
-   }
+    $this->app->bind(PersistenceRepositoryInterface::class, BaseRepository::class);
+    $this->app->bind(UsersRepositoryInterface::class, UsersRepository::class);
+}
 }
