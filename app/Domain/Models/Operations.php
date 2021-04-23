@@ -12,4 +12,18 @@ class Operations extends Model
      * @var string
      */
     protected $table = 'operations';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title',
+        'value',
+        'wallets_id',
+        'transactions_id',
+        'transactions_id',
+        'operations_type_id',
+    ];
 }

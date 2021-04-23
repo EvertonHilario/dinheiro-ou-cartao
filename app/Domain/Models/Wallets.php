@@ -12,4 +12,13 @@ class Wallets extends Model
      * @var string
      */
     protected $table = 'wallets';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'balance',
+    ];
 }
