@@ -87,6 +87,12 @@ class estrutura_apresentacao extends Seeder
             ]);
 
             DB::table('transactions_status')->insert([
+                'status' => 'Estornado',
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
+            ]);
+
+            DB::table('transactions_status')->insert([
                 'status' => 'Erro ao processar',
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
