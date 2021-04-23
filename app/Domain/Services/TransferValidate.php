@@ -4,17 +4,19 @@ namespace App\Domain\Services;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Domain\Repositories\UsersRepositoryInterface;
+use App\Domain\Repositories\{UsersRepositoryInterface, WalletsRepositoryInterface};
 
 class TransferValidate
 {
     private $users;
+    private $wallets;
 
     const SHOPKEEPER_TYPE_ID = 2;
 
-    public function __construct(UsersRepositoryInterface $users)
+    public function __construct(UsersRepositoryInterface $users, WalletsRepositoryInterface $wallets)
     {
         $this->users = $users;
+        $this->wallets = $wallets;
     }
 
     public function request(Request $request): void
@@ -25,7 +27,8 @@ class TransferValidate
         $this->isGreaterThanZero($request);
         // (x) verificar se o payer existe
         $this->thePayerExists($request);
-        // () verificar se o payer tem saldo para realizar a transafrência
+        // (x) verificar se o payer tem saldo para realizar a transafrência
+        $this->haveEnoughBalance($request);
         // (x) verificar se o payee existe
         $this->thePayeeExists($request);
         // (x) loJista não pode fazer transferência
@@ -40,9 +43,9 @@ class TransferValidate
             'payee_document' => 'required',
             'value' => 'required:numeric|between:0,99.99',
         ],[
-            'payer_document.required' => 'O documento de quem transfere deve ser preenchido',
-            'payee_document.required' => 'O documento de quem recebe deve ser preenchido',
-            'value.required' => 'O valor deve ser preenchido',
+            'payer_document.required' => 'O documento de quem transfere deve ser preenchido.',
+            'payee_document.required' => 'O documento de quem recebe deve ser preenchido.',
+            'value.required' => 'O valor deve ser preenchido.',
         ]);
 
         if ($validator->fails()) {
@@ -54,7 +57,7 @@ class TransferValidate
     private function isGreaterThanZero(Request $request): ?bool
     {
         if ($request->input('value') <= 0) {
-            throw new \DomainException ('O valor tem que ser maior que zero', 422);
+            throw new \DomainException ('O valor tem que ser maior que zero.', 422);
         }
         return true;
     }
@@ -62,7 +65,7 @@ class TransferValidate
     private function thePayerExists(Request $request): ?bool
     {
         if (!$this->users->findByAttribute("document", $request->input('payer_document'))) {
-            throw new \DomainException ('O usuário que está transferindo não existe', 422);
+            throw new \DomainException ('O usuário que está transferindo não existe.', 422);
         }
         return true;
     }
@@ -70,7 +73,7 @@ class TransferValidate
     private function thePayeeExists(Request $request): ?bool
     {
         if (!$this->users->findByAttribute("document", $request->input('payee_document'))) {
-            throw new \DomainException ('O usuário que receberá não existe', 422);
+            throw new \DomainException ('O usuário que receberá não existe.', 422);
         }
         return true;
     }
@@ -79,7 +82,18 @@ class TransferValidate
     {
         $user = $this->users->findByAttribute("document", $request->input('payer_document'));
         if ($user->users_type_id == self::SHOPKEEPER_TYPE_ID) {
-            throw new \DomainException ('Lojista não pode fazer transferência', 422);
+            throw new \DomainException ('Lojista não pode fazer transferência.', 422);
+        }
+        return true;
+    }
+
+    private function haveEnoughBalance(Request $request): ?bool
+    {
+        $payer = $this->users->findByAttribute("document", $request->input('payer_document'));
+        $wallet = $this->wallets->findByAttribute("users_id", $payer->id);
+        
+        if ($wallet->balance < $request->input('value')) {
+            throw new \DomainException ('Saldo insuficiente para realizar a transferência.', 422);
         }
         return true;
     }
