@@ -109,7 +109,7 @@ class TransferService implements TransferServiceInterface
             'transaction' => $this->transaction->get(),
             'payer' => $this->payer,
             'payee' => $this->payee,
-            'wallet' => $this->wallet,
+            'wallet' => $this->wallet->get(),
             'operation' => $this->wallet->getOperation()
         ];
     }
