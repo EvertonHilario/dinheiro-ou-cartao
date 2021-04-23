@@ -2,21 +2,31 @@
 
 namespace App\Domain\Services;
 
-use Illuminate\Support\Facades\Validator;
+use App\Domain\Repositories\{
+    UsersRepositoryInterface,
+    WalletsRepositoryInterface,
+    ExternalAuthorizerRepositoryInterface
+};
+
 use Illuminate\Http\Request;
-use App\Domain\Repositories\{UsersRepositoryInterface, WalletsRepositoryInterface};
+use Illuminate\Support\Facades\Validator;
 
 class TransferValidate
 {
     private $users;
     private $wallets;
+    private $externalAuthorizer;
 
     const SHOPKEEPER_TYPE_ID = 2;
 
-    public function __construct(UsersRepositoryInterface $users, WalletsRepositoryInterface $wallets)
-    {
+    public function __construct(
+        UsersRepositoryInterface $users,
+        WalletsRepositoryInterface $wallets,
+        ExternalAuthorizerRepositoryInterface $externalAuthorizer
+    ) {
         $this->users = $users;
         $this->wallets = $wallets;
+        $this->externalAuthorizer = $externalAuthorizer;
     }
 
     public function request(Request $request): void
@@ -33,7 +43,8 @@ class TransferValidate
         $this->thePayeeExists($request);
         // (x) loJista não pode fazer transferência
         $this->isShopkeeper($request);
-        // () validar transferência em um autorizador externo
+        // (x) validar transferência em um autorizador externo
+        $this->checkExternalAuthorizer($request);
     }
 
     private function requestValidate(Request $request): ?bool
@@ -94,6 +105,14 @@ class TransferValidate
         
         if ($wallet->balance < $request->input('value')) {
             throw new \DomainException ('Saldo insuficiente para realizar a transferência.', 422);
+        }
+        return true;
+    }
+
+    private function checkExternalAuthorizer(Request $request): ?bool
+    {
+        if (!$this->externalAuthorizer->check()) {
+            throw new \DomainException ('Erro ao autenticar a sua transação (Autenticador externo)', 422);
         }
         return true;
     }

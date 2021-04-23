@@ -1,12 +1,14 @@
 <?php
     namespace App\Providers;
 
+    use App\Domain\Repositories\ExternalAuthorizerRepositoryInterface;
     use App\Domain\Repositories\PersistenceRepositoryInterface;
     use App\Domain\Repositories\UsersRepositoryInterface;
     use App\Domain\Repositories\TransactionsRepositoryInterface;
     use App\Domain\Repositories\WalletsRepositoryInterface;
     use App\Domain\Repositories\OperationsRepositoryInterface;
 
+    use App\Infrastructure\Api\ExternalAuthorizerRepository;
     use App\Infrastructure\Persistence\BaseRepository;
     use App\Infrastructure\Persistence\UsersRepository;
     use App\Infrastructure\Persistence\TransactionsRepository;
@@ -33,5 +35,6 @@
         $this->app->bind(TransactionsRepositoryInterface::class, TransactionsRepository::class);
         $this->app->bind(WalletsRepositoryInterface::class, WalletsRepository::class);
         $this->app->bind(OperationsRepositoryInterface::class, OperationsRepository::class);
+        $this->app->bind(ExternalAuthorizerRepositoryInterface::class, ExternalAuthorizerRepository::class);
     }
 }
