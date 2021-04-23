@@ -2,6 +2,6 @@
 
 namespace App\Domain\Repositories;
 
-interface UsersRepositoryInterface
+interface UsersRepositoryInterface extends PersistenceRepositoryInterface
 {
 }
