@@ -26,7 +26,7 @@ class estrutura_apresentacao extends Seeder
                 'updated_at' => $timestamp,
             ]);
     
-            DB::table('users')->insert([
+            $user1 = DB::table('users')->insertGetId([
                 'full_name' => 'Éverton Hilario',
                 'document' => '00000000001',
                 'email' => 'everton@gmail.com',
@@ -36,7 +36,7 @@ class estrutura_apresentacao extends Seeder
                 'updated_at' => $timestamp,
             ]);
     
-            DB::table('users')->insert([
+            $user2  = DB::table('users')->insertGetId([
                 'full_name' => 'Luís de Almeida',
                 'document' => '00000000002',
                 'email' => 'luis@gmail.com',
@@ -46,7 +46,7 @@ class estrutura_apresentacao extends Seeder
                 'updated_at' => $timestamp,
             ]);
     
-            DB::table('users')->insert([
+            $user3 = DB::table('users')->insertGetId([
                 'full_name' => 'Dinheiro ou Cartão S/A',
                 'document' => '00000000000001',
                 'email' => 'contato@gmail.com',
@@ -94,12 +94,35 @@ class estrutura_apresentacao extends Seeder
 
             DB::table('operations_type')->insert([
                 'type' => 'Debito',
+                'operation' => '+',
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
 
             DB::table('operations_type')->insert([
                 'type' => 'Saque',
+                'operation' => '-',
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
+            ]);
+
+            DB::table('wallets')->insert([
+                'balance' => 700.00,
+                'users_id' => $user1,
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
+            ]);
+
+            DB::table('wallets')->insert([
+                'balance' => 100.00,
+                'users_id' => $user2,
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
+            ]);
+
+            DB::table('wallets')->insert([
+                'balance' => 50.00,
+                'users_id' => $user3,
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
