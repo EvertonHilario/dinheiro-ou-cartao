@@ -53,7 +53,7 @@ class TransferValidate
             'payer_document' => 'required',
             'payee_document' => 'required',
             'value' => 'required:numeric|between:0,99.99',
-        ],[
+        ], [
             'payer_document.required' => 'O documento de quem transfere deve ser preenchido.',
             'payee_document.required' => 'O documento de quem recebe deve ser preenchido.',
             'value.required' => 'O valor deve ser preenchido.',

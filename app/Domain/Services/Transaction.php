@@ -68,7 +68,9 @@ class Transaction
 
     public function processing()
     {
-        $this->transactionRepository->update($this->transaction, ["transactions_status_id" => self::STATUS_PROCESSING]);
+        $this->transactionRepository->update($this->transaction, [
+            "transactions_status_id" => self::STATUS_PROCESSING
+        ]);
         return $this;
     }
 

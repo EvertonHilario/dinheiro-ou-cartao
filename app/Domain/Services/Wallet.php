@@ -3,6 +3,7 @@
 namespace App\Domain\Services;
 
 use App\Domain\Repositories\{OperationsRepositoryInterface, WalletsRepositoryInterface};
+use App\Domain\Models\{Wallets, Operations};
 
 class Wallet
 {
@@ -11,6 +12,7 @@ class Wallet
     private $wallet;
     private $transaction;
     private $operations;
+    private $title;
 
     const OPERATION_TYPE_WITHDRAW = 1;
     const OPERATION_TYPE_DEPOSIT = 2;
@@ -41,17 +43,23 @@ class Wallet
         return $this;
     }
 
-    public function withdraw($title): self
+    public function setTitle($title): self
     {
-        $this->updateBalance($this->wallet->balance - $this->value)
-            ->insertOperation($title, self::OPERATION_TYPE_WITHDRAW);
+        $this->title = $title;
         return $this;
     }
 
-    public function deposit($title): self
+    public function withdraw(): self
+    {
+        $this->updateBalance($this->wallet->balance - $this->value)
+            ->insertOperation(self::OPERATION_TYPE_WITHDRAW);
+        return $this;
+    }
+
+    public function deposit(): self
     {
         $this->updateBalance($this->wallet->balance + $this->value)
-            ->insertOperation($title, self::OPERATION_TYPE_DEPOSIT);
+            ->insertOperation(self::OPERATION_TYPE_DEPOSIT);
         return $this;
     }
 
@@ -61,10 +69,10 @@ class Wallet
         return $this;
     }
 
-    public function insertOperation($title, $operationType): void
+    public function insertOperation($operationType): void
     {
         $this->operations = $this->operations->create([
-            "title" => $title,
+            "title" => $this->title,
             "value" => $this->value,
             "wallets_id" => $this->wallet->id,
             "transactions_id" => $this->transaction->id,
@@ -72,12 +80,12 @@ class Wallet
         ]);
     }
 
-    public function get()
+    public function get(): Wallets
     {
         return $this->wallet;
     }
 
-    public function getOperation()
+    public function getOperation(): Operations
     {
         return $this->operations;
     }

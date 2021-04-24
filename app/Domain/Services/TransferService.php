@@ -59,10 +59,11 @@ class TransferService implements TransferServiceInterface
             ->setTransaction($this->transaction->get())
             ->setWallet($request->input('payer_document'))
             ->setValue($request->input('value'))
-            ->withdraw(
+            ->setTitle(
                 "Saque: Transferencia de {$this->payer->full_name} para "
                 . "{$this->payee->full_name} às {$this->transaction->get()->created_at}"
-            );
+            )
+            ->withdraw();
 
         //atualiza o status da transição para : status = processando
         $this->transaction->processing();
@@ -81,15 +82,16 @@ class TransferService implements TransferServiceInterface
             ->setTransaction($transaction->get())
             ->setWallet($payee->id)
             ->setValue($transaction->get()->value)
-            ->deposit(
-                "Dempósito: Transferencia de {$payer->full_name} para "
+            ->setTitle(
+                "Saque: Transferencia de {$payer->full_name} para "
                 . "{$payee->full_name} às {$transaction->get()->created_at}"
-            );
+            )
+            ->deposit();
+
         //realiza o saque na carteira do pagador : status = processado
         $transaction->processed();
 
         // enviar mensagem para o beneficiário
-
     }
 
     private function dispatch($transaction, $wallet, $payee, $payer): void
