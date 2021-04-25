@@ -15,8 +15,8 @@ class CreateTransactionsNotification extends Migration
     {
         Schema::create('transactions_notification', function (Blueprint $table) {
             $table->id();
-            $table->text('payload');
-            $table->text('message');
+            $table->text('payload_request');
+            $table->text('payload_response');
             $table->integer('status')->nullable();
             $table->foreignId('users_id')->references('id')->on('users')->nullable();
             $table->foreignId('transactions_id')->references('id')->on('transactions')->nullable();

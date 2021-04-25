@@ -16,7 +16,6 @@ class CreateOperationsType extends Migration
         Schema::create('operations_type', function (Blueprint $table) {
             $table->id();
             $table->string('type')->nullable();
-            $table->string('operation', 1)->nullable();
             $table->timestamps();
         });
     }
