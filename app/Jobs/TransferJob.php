@@ -2,10 +2,7 @@
 
 namespace App\Jobs;
 use App\Domain\Services\TransferService;
-use App\Domain\Services\Wallet;
-
-use App\Domain\Services\Transaction;
-use App\Domain\Repositories\UsersRepositoryInterface;
+use App\Domain\Services\{Transaction, Wallet, Messenger};
 use App\Domain\Models\Users;
 
 class TransferJob extends Job
@@ -14,6 +11,7 @@ class TransferJob extends Job
     private $wallet;
     private $payee;
     private $payer;
+    private $messenger;
 
     /**
      * Create a new job instance.
@@ -24,12 +22,14 @@ class TransferJob extends Job
         Transaction $transaction,
         Wallet $wallet,
         Users $payee,
-        Users $payer
+        Users $payer,
+        Messenger $messenger
     ) {
         $this->transaction = $transaction;
         $this->wallet = $wallet;
         $this->payee = $payee;
         $this->payer = $payer;
+        $this->messenger = $messenger;
     }
 
     /**
@@ -39,6 +39,6 @@ class TransferJob extends Job
      */
     public function handle()
     {
-        return TransferService::pull($this->transaction, $this->wallet, $this->payee, $this->payer);
+        return TransferService::pull($this->transaction, $this->wallet, $this->payee, $this->payer, $this->messenger);
     }
 }
