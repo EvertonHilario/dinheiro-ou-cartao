@@ -100,14 +100,12 @@ class estrutura_apresentacao extends Seeder
 
             DB::table('operations_type')->insert([
                 'type' => 'Debito',
-                'operation' => '+',
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
 
             DB::table('operations_type')->insert([
                 'type' => 'Saque',
-                'operation' => '-',
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
