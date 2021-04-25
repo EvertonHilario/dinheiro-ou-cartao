@@ -36,18 +36,20 @@ class ExternalMessengerRepository implements ExternalMessengerRepositoryInterfac
         } catch (\Exception $e) {
             if ($this->attemptsSending <= getenv('EXT_MEN_ATTEMPTS_SENDING')) {
                 error_log(
-                    "MESSENGER => UserId->{$attributes['users_id']} Tentativas de envio-> {$this->attemptsSending}\n",
+                    "[error] Serviço externo => UserId:{$attributes['users_id']}"
+                        . " Tentativas de envio:{$this->attemptsSending}\n",
                     3,
-                    "/var/www/html/storage/logs/messages.log"
+                    getenv('LOGS_MESSENGER')
                 );
                 $this->attemptsSending++;
                 $this->send($attributes);
             }
         }
         error_log(
-            "MESSENGER => Forma feitas " . getenv('EXT_MEN_ATTEMPTS_SENDING') . " tentativas de envio sem sucesso\n",
+            "[error] Serviço externo => Forma feitas "
+                . getenv('EXT_MEN_ATTEMPTS_SENDING') . " tentativas de envio sem sucesso\n",
             3,
-            "/var/www/html/storage/logs/messages.log"
+            getenv('LOGS_MESSENGER')
         );
         throw new \Exception('Mensageiro externo indisponível no momento.');
     }

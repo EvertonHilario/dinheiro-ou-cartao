@@ -29,10 +29,11 @@ class Messenger
         //salva na base o envio da mensagem: status = enviando
         $attributes['status'] = self::STATUS_SENDING;
         $notification = $this->notification->create($attributes);
+        error_log("1 - Persiste notificação User:{$attributes['users_id']}\n", 3, getenv('LOGS_MESSENGER'));
 
         //envia a mensagem para fila do rabbitmk
         $this->dispatch($notification, $attributes, $this->messenger);
-        error_log("MESSENGER => push: UserId-> {$attributes['users_id']}\n", 3, "/var/www/html/storage/logs/messages.log");
+        error_log("2 - Disparada notificação para UserId: {$attributes['users_id']}\n", 3, getenv('LOGS_MESSENGER'));
     }
 
     public static function pull(
@@ -42,11 +43,12 @@ class Messenger
     ): void {
         // envia a mensagem pelo mensageiro externo
         $messenger->send($attributes);
+        error_log("3 - Serviço externo de envio UserId: {$attributes['users_id']}\n", 3, getenv('LOGS_MESSENGER'));
 
         // atualiza o status da mensagem: status = enviado
         $notification->status = self::STATUS_SENT;
         $notification->update();
-        error_log("MESSENGER => pull: UserId-> {$attributes['users_id']}\n", 3, "/var/www/html/storage/logs/messages.log");
+        error_log("4 - Concluido envio UserId: {$attributes['users_id']}\n", 3, getenv('LOGS_MESSENGER'));
     }
 
     private function dispatch(

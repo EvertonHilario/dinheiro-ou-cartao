@@ -38,8 +38,10 @@ class TransferService implements TransferServiceInterface
 
     public function push(Request $request): array
     {
+        error_log("PUSH\n\n", 3, getenv('LOGS_TRANSACTION'));
+        error_log("1 - Iniciando processo de transferência\n", 3, getenv('LOGS_TRANSACTION'));
 
-        //valida a solicitação de depósito
+        error_log("2 - Validando dados da solicitação de transferencia\n", 3, getenv('LOGS_TRANSACTION'));
         $this->validate->request($request);
 
         //instancia o pagador
@@ -50,7 +52,7 @@ class TransferService implements TransferServiceInterface
         $this->payee = $this->usersRepository
             ->findByAttribute("document", $request->input('payee_document'));
 
-        //inicia a tranasferencia : status = solicitado
+        error_log("3 - Persistindo Transação: status = solicitado\n", 3, getenv('LOGS_TRANSACTION'));
         $this->transaction
             ->setPayer($this->payer)
             ->setPayee($this->payee)
@@ -61,7 +63,7 @@ class TransferService implements TransferServiceInterface
         $title = "Saque: Transferencia de {$this->payer->full_name} para "
             . "{$this->payee->full_name} às {$this->transaction->get()->created_at}";
 
-        //realiza o saque na carteira do pagador
+        error_log("4 - Realizado saque na carteira do depositante\n", 3, getenv('LOGS_TRANSACTION'));
         $this->wallet
             ->setTransaction($this->transaction->get())
             ->setWallet($request->input('payer_document'))
@@ -69,19 +71,20 @@ class TransferService implements TransferServiceInterface
             ->setTitle($title)
             ->withdraw();
 
-        //atualiza o status da transição para : status = processando
+        error_log("5 - Persistindo Transação: status = processando\n", 3, getenv('LOGS_TRANSACTION'));
         $this->transaction->processing();
 
-        // enviar mensagem para o depositante
+        error_log("6 - Disparadando notificação para o depositante\n", 3, getenv('LOGS_TRANSACTION'));
         $this->messenger->push([
             "message" => $title,
             "users_id" => $this->payer->id,
             "transactions_id" => $this->transaction->get()->id,
         ]);
 
-        //envia a mensagem para fila do rabbitmk
+        error_log("7 - Disparadando solicitação de debito na carteira do recebedor\n", 3, getenv('LOGS_TRANSACTION'));
         $this->dispatch($this->transaction, $this->wallet, $this->payee, $this->payer, $this->messenger);
 
+        error_log("8 - Solicitação de transferencia concluida\n", 3, getenv('LOGS_TRANSACTION'));
         return $this->response();
     }
 
@@ -92,10 +95,13 @@ class TransferService implements TransferServiceInterface
         Users $payer,
         Messenger $messenger
     ): void {
+        error_log("\nPULL\n\n", 3, getenv('LOGS_TRANSACTION'));
+        error_log("1 - Iniciando processo de debito na carteira do beneficiario\n", 3, getenv('LOGS_TRANSACTION'));
+
         $title = "Debito: Transferencia de {$payer->full_name} para "
             . "{$payee->full_name} às {$transaction->get()->created_at}";
 
-        //realiza o depósito na carteira do recebedor
+        error_log("2 - Relizando Depósito na carteira do beneficiário\n", 3, getenv('LOGS_TRANSACTION'));
         $wallet
             ->setTransaction($transaction->get())
             ->setWallet($payee->id)
@@ -103,15 +109,16 @@ class TransferService implements TransferServiceInterface
             ->setTitle($title)
             ->deposit();
 
-        //realiza o saque na carteira do pagador : status = processado
+        error_log("3 - Persistindo Transação: status = processado\n", 3, getenv('LOGS_TRANSACTION'));
         $transaction->processed();
 
-        // enviar mensagem para o beneficiário
+        error_log("4 - Disparadando notificação para o beneficiário\n", 3, getenv('LOGS_TRANSACTION'));
         $messenger->push([
             "message" => $title,
             "users_id" => $payee->id,
             "transactions_id" => $transaction->get()->id,
         ]);
+        error_log("5 - Transação concluída\n", 3, getenv('LOGS_TRANSACTION'));
     }
 
     private function dispatch($transaction, $wallet, $payee, $payer, $messenger): void
