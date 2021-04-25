@@ -24,7 +24,7 @@ class ExternalAuthorizerRepository implements ExternalAuthorizerRepositoryInterf
             throw new \Exception ('Autenticador externo indisponível no momento.');
         }
 
-        if(!$response->json()['message'] == "Autorizado") {
+        if (!$response->json()['message'] == "Autorizado") {
             return false;
         }
 
