@@ -11,5 +11,17 @@ class TransactionsNotification extends Model
      *
      * @var string
      */
-    protected $table = 'notification';
+    protected $table = 'transactions_notification';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'message',
+        'users_id',
+        'transactions_id',
+        'status',
+    ];
 }
