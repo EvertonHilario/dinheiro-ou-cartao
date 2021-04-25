@@ -11,7 +11,7 @@ class estrutura_apresentacao extends Seeder
      */
     public function run()
     {
-        if(!DB::table('users_type')->get()->all()) {
+        if (!DB::table('users_type')->get()->all()) {
             $timestamp = date('Y/m/d H:i:s');
 
             $userTypePf = DB::table('users_type')->insertGetId([
@@ -19,13 +19,13 @@ class estrutura_apresentacao extends Seeder
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
-    
+
             $userTypePj = DB::table('users_type')->insertGetId([
                 'type' => 'Pessoa Jurídica (lojistas)',
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
-    
+
             $user1 = DB::table('users')->insertGetId([
                 'full_name' => 'Éverton Hilario',
                 'document' => '00000000001',
@@ -35,7 +35,7 @@ class estrutura_apresentacao extends Seeder
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
-    
+
             $user2  = DB::table('users')->insertGetId([
                 'full_name' => 'Luís de Almeida',
                 'document' => '00000000002',
@@ -45,7 +45,7 @@ class estrutura_apresentacao extends Seeder
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
-    
+
             $user3 = DB::table('users')->insertGetId([
                 'full_name' => 'Dinheiro ou Cartão S/A',
                 'document' => '00000000000001',
@@ -55,7 +55,7 @@ class estrutura_apresentacao extends Seeder
                 'created_at' => $timestamp,
                 'updated_at' => $timestamp,
             ]);
-                
+
             DB::table('transactions_type')->insert([
                 'type' => 'Transferência',
                 'created_at' => $timestamp,
