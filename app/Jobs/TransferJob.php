@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Jobs;
+
 use App\Domain\Services\TransferService;
 use App\Domain\Services\{Transaction, Wallet, Messenger};
 use App\Domain\Models\Users;
