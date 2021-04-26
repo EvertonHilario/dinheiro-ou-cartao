@@ -25,14 +25,12 @@ class TransferService implements TransferServiceInterface
         Transaction $transaction,
         UsersRepositoryInterface $usersRepository,
         Wallet $wallet,
-        TransferJob $transferJob,
         Messenger $messenger
     ) {
         $this->validate = $validate;
         $this->transaction = $transaction;
         $this->usersRepository = $usersRepository;
         $this->wallet = $wallet;
-        $this->transferJob = $transferJob;
         $this->messenger = $messenger;
     }
 
@@ -66,7 +64,7 @@ class TransferService implements TransferServiceInterface
         error_log("4 - Realizado saque na carteira do depositante\n", 3, getenv('LOGS_TRANSACTION'));
         $this->wallet
             ->setTransaction($this->transaction->get())
-            ->setWallet($request->input('payer_document'))
+            ->setWallet($this->payer->id)
             ->setValue($request->input('value'))
             ->setTitle($title)
             ->withdraw();

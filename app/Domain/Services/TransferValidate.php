@@ -7,7 +7,6 @@ use App\Domain\Repositories\{
     WalletsRepositoryInterface,
     ExternalAuthorizerRepositoryInterface
 };
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -60,7 +59,7 @@ class TransferValidate
         ]);
 
         if ($validator->fails()) {
-            throw new \DomainException ($validator->getMessageBag()->first(), 422);
+            throw new \DomainException($validator->getMessageBag()->first(), 422);
         }
         return true;
     }
@@ -68,7 +67,7 @@ class TransferValidate
     private function isGreaterThanZero(Request $request): ?bool
     {
         if ($request->input('value') <= 0) {
-            throw new \DomainException ('O valor tem que ser maior que zero.', 422);
+            throw new \DomainException('O valor tem que ser maior que zero.', 422);
         }
         return true;
     }
@@ -76,7 +75,7 @@ class TransferValidate
     private function thePayerExists(Request $request): ?bool
     {
         if (!$this->users->findByAttribute("document", $request->input('payer_document'))) {
-            throw new \DomainException ('O usuário que está transferindo não existe.', 422);
+            throw new \DomainException('O usuário que está transferindo não existe.', 422);
         }
         return true;
     }
@@ -84,7 +83,7 @@ class TransferValidate
     private function thePayeeExists(Request $request): ?bool
     {
         if (!$this->users->findByAttribute("document", $request->input('payee_document'))) {
-            throw new \DomainException ('O usuário que receberá não existe.', 422);
+            throw new \DomainException('O usuário que receberá não existe.', 422);
         }
         return true;
     }
@@ -93,7 +92,7 @@ class TransferValidate
     {
         $user = $this->users->findByAttribute("document", $request->input('payer_document'));
         if ($user->users_type_id == self::SHOPKEEPER_TYPE_ID) {
-            throw new \DomainException ('Lojista não pode fazer transferência.', 422);
+            throw new \DomainException('Lojista não pode fazer transferência.', 422);
         }
         return true;
     }
@@ -102,9 +101,9 @@ class TransferValidate
     {
         $payer = $this->users->findByAttribute("document", $request->input('payer_document'));
         $wallet = $this->wallets->findByAttribute("users_id", $payer->id);
-        
+
         if ($wallet->balance < $request->input('value')) {
-            throw new \DomainException ('Saldo insuficiente para realizar a transferência.', 422);
+            throw new \DomainException('Saldo insuficiente para realizar a transferência.', 422);
         }
         return true;
     }
@@ -112,7 +111,7 @@ class TransferValidate
     private function checkExternalAuthorizer(Request $request): ?bool
     {
         if (!$this->externalAuthorizer->check()) {
-            throw new \DomainException ('Erro ao autenticar a sua transação (Autenticador externo)', 422);
+            throw new \DomainException('Erro ao autenticar a sua transação (Autenticador externo)', 422);
         }
         return true;
     }
