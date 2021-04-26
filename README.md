@@ -14,7 +14,7 @@ API para realização de transações financeiras assíncronas entre carteiras v
 ## Fluxo da transação
 
 Transação entre um usuário comum e um lojista:
-![](https://lh5.googleusercontent.com/sD2vGzz9wQ45UoSygp1wxNaUqBO1YYJlZtp9tWfFML220w3Zy_x6Q_qVbJQ3HnOyhy1V0xjfO3duNT-KA6hP=w1848-h979)
+![](https://camo.githubusercontent.com/dbc5f555085caf28407532f3de5af237cdff4de089c0cb3a4a06cc1bd456b1d2/68747470733a2f2f6c68352e676f6f676c6575736572636f6e74656e742e636f6d2f73443276477a7a3977513435556f537967703177784e615571424f3159594a6c5a747039745766464d4c32323077335a795f7836515f7156624a5133486e4f796879315630786a664f3364754e542d4b413668503d77313834382d68393739)
 
 Transação entre dois usuários comuns:
 ![](https://camo.githubusercontent.com/bbbc6956f4c83378c5ec5898cbf186b5cd1c6eb47c4f5f2704f02a3ad606fe92/68747470733a2f2f6c68332e676f6f676c6575736572636f6e74656e742e636f6d2f5044694c4f5038597a33777a7751316b3865742d72337059304563393476444d474241333957414e5f5936786336654e4756454448554370665363386873555a36594e416b4b687a6b4a706932625168354e6f583d77313834382d68393739)
@@ -26,8 +26,8 @@ Transação entre dois usuários comuns:
 ![](https://camo.githubusercontent.com/65e35efeeaa6bd42f086bf5209e003edc11e8a46882932d023adcda847b7063f/68747470733a2f2f6c68352e676f6f676c6575736572636f6e74656e742e636f6d2f6d726b64775437306f765f434a775758655333537764797373482d706447545a6a41686f6c41444e42706d684859776b6b4c7a5664534f486a314d70724a75746e43302d766e526c34695539326c4442414333753d77313834382d68393739)
 
 ## Documentações
-[Instalação](https://github.com/EvertonHilario/dinheiro-ou-cartao/wiki/Instalação)
-[Análise](https://docs.google.com/document/d/1eMdW1lqg6SQDiWjGWT8aOSGfRbnlKuw_7YBYYTIlcFg/edit?usp=sharing)
+- [Instalação](https://github.com/EvertonHilario/dinheiro-ou-cartao/wiki/Instalação)
+- [Análise](https://docs.google.com/document/d/1eMdW1lqg6SQDiWjGWT8aOSGfRbnlKuw_7YBYYTIlcFg/edit?usp=sharing)
 
 ## Links
 - [PHP](https://www.php.net/)
