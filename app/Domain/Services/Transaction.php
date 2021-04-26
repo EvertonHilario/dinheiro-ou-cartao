@@ -3,6 +3,7 @@
 namespace App\Domain\Services;
 
 use App\Domain\Repositories\TransactionsRepositoryInterface;
+use App\Domain\Models\Transactions;
 
 class Transaction
 {
@@ -16,6 +17,7 @@ class Transaction
     const STATUS_REQUESTED = 1;
     const STATUS_PROCESSING = 2;
     const STATUS_PROCESSED = 3;
+    const STATUS_REVERSED = 4;
 
     public function __construct(
         TransactionsRepositoryInterface $transactionRepository
@@ -72,6 +74,16 @@ class Transaction
             "transactions_status_id" => self::STATUS_PROCESSING
         ]);
         return $this;
+    }
+
+    public function reversed($transaction): void
+    {
+        $this->transactionRepository->update($transaction, ["transactions_status_id" => self::STATUS_REVERSED]);
+    }
+
+    public function getByHash($hash): Transactions
+    {
+        return $this->transactionRepository->findByAttribute("hash", $hash);
     }
 
     public function get()
