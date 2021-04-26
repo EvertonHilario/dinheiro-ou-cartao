@@ -32,8 +32,8 @@ class ChargebackValidate
         $this->requestValidate($request);
 
         // (x) verificar se a transação existe
-        // (x) o status da transição deve ser = 3 (processado)
-        // (x) tipo de transição = 1 (Transferência)
+        // (x) o status da transação deve ser = 3 (processado)
+        // (x) tipo de transação = 1 (Transferência)
         $this->transactionValidate($request);
 
         // (x) validar transferência em um autorizador externo
@@ -45,7 +45,7 @@ class ChargebackValidate
         $validator = Validator::make($request->all(), [
             'hash' => 'required',
         ], [
-            'hash.required' => 'O hash da transição deve ser informado.',
+            'hash.required' => 'O hash da transação deve ser informado.',
         ]);
 
         if ($validator->fails()) {
@@ -67,7 +67,7 @@ class ChargebackValidate
         }
 
         if ($transaction->transactions_type_id != self::TRANSACTIONS_TYPE_ID) {
-            throw new \DomainException('Este tipo de transição não pode ser estornada.', 422);
+            throw new \DomainException('Este tipo de transação não pode ser estornada.', 422);
         }
         return true;
     }
