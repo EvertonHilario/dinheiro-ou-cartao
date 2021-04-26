@@ -52,8 +52,8 @@ class ChargebackService implements ChargebackServiceInterface
 
         error_log("4 - Persistindo Transação: status = solicitado\n", 3, getenv('LOGS_TRANSACTION'));
         $this->transaction
-            ->setPayer($this->payer)
-            ->setPayee($this->payee)
+            ->setPayerId($this->payer->id)
+            ->setPayeeId($this->payee->id)
             ->setValue($transactionOrigin->value)
             ->setTransactionType(self::TRANSACTION_TYPE)
             ->requested();

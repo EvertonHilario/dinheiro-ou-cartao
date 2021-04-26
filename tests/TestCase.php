@@ -13,4 +13,9 @@ abstract class TestCase extends BaseTestCase
     {
         return require __DIR__.'/../bootstrap/app.php';
     }
+
+    public static function factory(string $className, $parameters = []): object
+    {
+        return new $className(...$parameters);
+    }
 }

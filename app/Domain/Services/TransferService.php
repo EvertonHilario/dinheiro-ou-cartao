@@ -52,8 +52,8 @@ class TransferService implements TransferServiceInterface
 
         error_log("3 - Persistindo Transação: status = solicitado\n", 3, getenv('LOGS_TRANSACTION'));
         $this->transaction
-            ->setPayer($this->payer)
-            ->setPayee($this->payee)
+            ->setPayerId($this->payer->id)
+            ->setPayeeId($this->payee->id)
             ->setValue($request->input('value'))
             ->setTransactionType(self::TRANSACTION_TYPE)
             ->requested();

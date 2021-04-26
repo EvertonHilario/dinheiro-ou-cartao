@@ -7,8 +7,8 @@ use App\Domain\Models\Transactions;
 
 class Transaction
 {
-    private $payer;
-    private $payee;
+    private $payerId;
+    private $payeeId;
     private $value;
     private $transactionType;
     private $transaction;
@@ -25,15 +25,15 @@ class Transaction
         $this->transactionRepository = $transactionRepository;
     }
 
-    public function setPayer($payer)
+    public function setPayerId($payerId)
     {
-        $this->payer = $payer;
+        $this->payerId = $payerId;
         return $this;
     }
 
-    public function setPayee($payee)
+    public function setPayeeId($payeeId)
     {
-        $this->payee = $payee;
+        $this->payeeId = $payeeId;
         return $this;
     }
 
@@ -54,8 +54,8 @@ class Transaction
         $this->transaction = $this->transactionRepository->create([
             'hash' => $this->hashGenerate(),
             'value' => $this->value,
-            'payer_id' => $this->payer->id,
-            'payee_id' => $this->payee->id,
+            'payer_id' => $this->payerId,
+            'payee_id' => $this->payeeId,
             'transactions_type_id' => $this->transactionType,
             'transactions_status_id' => self::STATUS_REQUESTED,
         ]);

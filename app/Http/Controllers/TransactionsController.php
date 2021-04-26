@@ -24,7 +24,7 @@ class TransactionsController extends Controller
         } catch (\DomainException $e) {
             return $this->responseAdapter($e->getCode(), $e->getMessage());
         } catch (\Exception $e) {
-            return $this->responseAdapter(500, "Erro ao executar a transação" . $e->getMessage());
+            return $this->responseAdapter(500, "Erro ao executar a transação");
         }
     }
 
