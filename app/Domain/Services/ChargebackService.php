@@ -4,11 +4,10 @@ namespace App\Domain\Services;
 
 use App\Domain\Contracts\ChargebackServiceInterface;
 use App\Domain\Repositories\UsersRepositoryInterface;
-use App\Domain\Models\Users;
 use App\Jobs\ChargebackJob;
 use Illuminate\Http\Request;
 
-class ChargebackService implements ChargebackServiceInterface
+class ChargebackService extends BaseService implements ChargebackServiceInterface
 {
     private $validate;
     private $transaction;
@@ -86,41 +85,13 @@ class ChargebackService implements ChargebackServiceInterface
         $this->dispatch($this->transaction, $this->wallet, $this->payee, $this->payer, $this->messenger);
 
         error_log("10 - Solicitação de estorno concluida\n", 3, getenv('LOGS_TRANSACTION'));
-        return $this->response();
-    }
-
-    public static function pull(
-        Transaction $transaction,
-        Wallet $wallet,
-        Users $payee,
-        Users $payer,
-        Messenger $messenger
-    ): void {
-        error_log("\nPULL\n\n", 3, getenv('LOGS_TRANSACTION'));
-        error_log("1 - Iniciando processo de estorno na carteira do depositante\n", 3, getenv('LOGS_TRANSACTION'));
-
-        $title = "Debito: Estorno de {$payer->full_name} para "
-            . "{$payee->full_name} às {$transaction->get()->created_at}";
-
-        error_log("2 - Relizando o estorno para carteira do depositante\n", 3, getenv('LOGS_TRANSACTION'));
-        $wallet
-            ->setTransaction($transaction->get())
-            ->setWallet($payee->id)
-            ->setValue($transaction->get()->value)
-            ->setTitle($title)
-            ->deposit();
-
-        error_log("3 - Persistindo Transação: status = processado\n", 3, getenv('LOGS_TRANSACTION'));
-        $transaction->processed();
-
-        error_log("4 - Disparadando notificação para o depositante\n", 3, getenv('LOGS_TRANSACTION'));
-        $messenger->push([
-            "message" => $title,
-            "users_id" => $payee->id,
-            "transactions_id" => $transaction->get()->id,
-        ]);
-
-        error_log("5 - Transação concluída\n", 3, getenv('LOGS_TRANSACTION'));
+        return [
+            'transaction' => $this->transaction->get(),
+            'payer' => $this->payer,
+            'payee' => $this->payee,
+            'wallet' => $this->wallet->get(),
+            'operation' => $this->wallet->getOperation()
+        ];
     }
 
     private function dispatch($transaction, $wallet, $payee, $payer, $messenger): void
@@ -132,16 +103,5 @@ class ChargebackService implements ChargebackServiceInterface
         }
 
         dispatch($job);
-    }
-
-    private function response(): array
-    {
-        return [
-            'transaction' => $this->transaction->get(),
-            'payer' => $this->payer,
-            'payee' => $this->payee,
-            'wallet' => $this->wallet->get(),
-            'operation' => $this->wallet->getOperation()
-        ];
     }
 }
