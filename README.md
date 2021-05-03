@@ -27,6 +27,15 @@ Transação entre dois usuários comuns:
 
 ![](https://meu-driver.s3-sa-east-1.amazonaws.com/IMG_20210425_172431.jpg)
 
+## Sugestão de melhoria da arquitetura (ainda mais distribuída)
+Trocar a aplicação (monolito:8000) que gerencia todo o fluxo de uma transação por três microsserviços, cada um responsável por uma parte do fluxo:
+
+- ms1:8000 => responsável por receber a requisição do usuário e realizar o saque
+- ms2:8001 => responsável por consumir a fila e realizar o depósito
+- ms3:8002 => responsável por enviar as notificações
+
+![](https://meu-driver.s3-sa-east-1.amazonaws.com/IMG_20210503_023829.jpg)
+
 ## Documentações
 - [Instalação](https://github.com/EvertonHilario/dinheiro-ou-cartao/wiki/Instalação)
 - [Endpoints](https://documenter.getpostman.com/view/15321494/TzRLnAx6)
