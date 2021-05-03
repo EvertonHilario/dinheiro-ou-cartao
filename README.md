@@ -29,7 +29,7 @@ Transação entre dois usuários comuns:
 
 ## Documentações
 - [Instalação](https://github.com/EvertonHilario/dinheiro-ou-cartao/wiki/Instalação)
-- [Endpoints](https://documenter.getpostman.com/view/15321494/TzJydGPW)
+- [Endpoints](https://documenter.getpostman.com/view/15321494/TzRLnAx6)
 - [Análise](https://docs.google.com/document/d/1eMdW1lqg6SQDiWjGWT8aOSGfRbnlKuw_7YBYYTIlcFg/edit?usp=sharing)
 
 ## Links
