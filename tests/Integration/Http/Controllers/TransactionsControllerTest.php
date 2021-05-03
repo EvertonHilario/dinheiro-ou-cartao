@@ -173,7 +173,7 @@ class TransactionsControllerTest extends TestCase
         $responseTransfer = json_decode($responseTransfer->content());
         $this->assertEquals("Transferência realizada com sucesso", $responseTransfer->message);
 
-        sleep(10);
+        sleep(17);
 
         $responseChargeback = $this->call('POST', '/v1/transactions/chargeback', ['hash' => $responseTransfer->data->transaction->hash]);
         $this->assertEquals(200, $responseChargeback->status());
