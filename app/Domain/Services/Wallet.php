@@ -69,15 +69,16 @@ class Wallet
         return $this;
     }
 
-    public function insertOperation($operationType): void
+    public function insertOperation($operationType): self
     {
-        $this->operations = $this->operations->create([
+        $this->operation = $this->operations->create([
             "title" => $this->title,
             "value" => $this->value,
             "wallets_id" => $this->wallet->id,
             "transactions_id" => $this->transaction->id,
             "operations_type_id" => $operationType,
         ]);
+        return $this;
     }
 
     public function get(): Wallets
@@ -87,6 +88,6 @@ class Wallet
 
     public function getOperation(): Operations
     {
-        return $this->operations;
+        return $this->operation;
     }
 }

@@ -49,6 +49,12 @@ class Transaction
         return $this;
     }
 
+    public function setTransaction($transaction)
+    {
+        $this->transaction = $transaction;
+        return $this;
+    }
+
     public function requested()
     {
         $this->transaction = $this->transactionRepository->create([
@@ -76,9 +82,10 @@ class Transaction
         return $this;
     }
 
-    public function reversed($transaction): void
+    public function reversed()
     {
-        $this->transactionRepository->update($transaction, ["transactions_status_id" => self::STATUS_REVERSED]);
+        $this->transactionRepository->update($this->transaction, ["transactions_status_id" => self::STATUS_REVERSED]);
+        return $this;
     }
 
     public function getByHash($hash): Transactions

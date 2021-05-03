@@ -72,7 +72,9 @@ class ChargebackService extends BaseService implements ChargebackServiceInterfac
         $this->transaction->processing();
 
         error_log("7 - Persistindo Transação Origem: status = Estornado\n", 3, getenv('LOGS_TRANSACTION'));
-        $this->transaction->reversed($transactionOrigin);
+        $this->transaction
+            ->setTransaction($transactionOrigin)
+            ->reversed();
 
         error_log("8 - Disparadando notificação para quem estorna\n", 3, getenv('LOGS_TRANSACTION'));
         $this->messenger->push([
