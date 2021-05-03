@@ -3,8 +3,10 @@
 namespace App\Domain\Services;
 
 use App\Domain\Models\TransactionsNotification;
-use App\Domain\Repositories\TransactionsNotificationRepositoryInterface;
-use App\Domain\Repositories\ExternalMessengerRepositoryInterface;
+use App\Domain\Repositories\{
+    TransactionsNotificationRepositoryInterface,
+    ExternalMessengerRepositoryInterface
+};
 use App\Jobs\MessengerJob;
 
 class Messenger
