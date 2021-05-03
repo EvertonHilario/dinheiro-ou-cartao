@@ -161,25 +161,33 @@ class TransactionsControllerTest extends TestCase
     }
 
     /**
-     * fluxo completo de transferência
+     * fluxo completo de um transferência e o estorno da mesma
      *
      * @return void
      */
-    public function testTransfer(): void
+    public function testTransferAndChargeback(): void
     {
-        $response = $this->call('POST', '/v1/transactions/transfer', $this->mockTransferRequest());
-        $this->assertEquals(200, $response->status());
+        $responseTransfer = $this->call('POST', '/v1/transactions/transfer', $this->mockTransferRequest());
+        $this->assertEquals(200, $responseTransfer->status());
 
-        $response = json_decode($response->content());
-        $this->assertEquals("Transferência realizada com sucesso", $response->message);
+        $responseTransfer = json_decode($responseTransfer->content());
+        $this->assertEquals("Transferência realizada com sucesso", $responseTransfer->message);
+
+        sleep(10);
+
+        $responseChargeback = $this->call('POST', '/v1/transactions/chargeback', ['hash' => $responseTransfer->data->transaction->hash]);
+        $this->assertEquals(200, $responseChargeback->status());
+
+        $responseChargeback = json_decode($responseChargeback->content());
+        $this->assertEquals("Estorno realizado com sucesso", $responseChargeback->message);
     }
 
-    private function mockTransferRequest()
+    private function mockTransferRequest(): array
     {
         return [
-            "value"=> 10,
-            "payer_document"=> '00000000001',
-            "payee_document"=> '00000000000001',
+            "value" => 10,
+            "payer_document" => '00000000001',
+            "payee_document" => '00000000000001',
         ];
     }
 }
